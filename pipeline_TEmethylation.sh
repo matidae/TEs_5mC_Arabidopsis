@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-#set -o xtrace
 #Check parameters
 if [[ $# -ne 3 ]]; then
 	echo -e "\n\tMissing parameters:"
@@ -52,7 +51,8 @@ awk 'NR==FNR{cnt[$10]++; next} cnt[$10]==1' $prefix".table.merge" $prefix".table
 #1.4 Filter out those that are more than certain proportion of complete in length with the reference and make a gff
 out_TEs=$prefix".table.merge.filter.gt06.gff"
 echo -e "\t- 1.4 Filtering by $prop_cutoff of length covered -> "$out_TEs
-grep "^Chr" $prefix".table.merge.filter" | awk	'$9>=0.6 {print $1, "RepeatMasker", "dispersed_repeat", $2, $3, ".", $4,".","ID="$10";name="$12";class="$11}' | sed 's/ /\t/g' > $out_TEs 
+grep "^Chr" $prefix".table.merge.filter" | awk	'$9>=0.6 {print $1, "RepeatMasker", "dispersed_repeat", \
+    $2, $3, ".", $4,".","ID="$10";name="$12";class="$11}' | sed 's/ /\t/g' > $out_TEs 
 sed -i 's/\bCaulimovirus /LTR\/Caulimovirus/' $out_TEs
 
 ### 2) TEs with methylation
